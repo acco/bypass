@@ -224,6 +224,21 @@ defmodule Bypass do
     do: Bypass.Instance.call(pid, {:expect_once, method, path, fun})
 
   @doc """
+  Allows the function to be invoked zero or many times.
+
+  ```elixir
+  Bypass.stub(bypass, fn conn ->
+    assert "/1.1/statuses/update.json" == conn.request_path
+    assert "POST" == conn.method
+    Plug.Conn.resp(conn, 429, ~s<{"errors": [{"code": 88, "message": "Rate limit exceeded"}]}>)
+  end)
+  ```
+  """
+  @spec stub(Bypass.t(), (Plug.Conn.t() -> Plug.Conn.t())) :: :ok
+  def stub(%Bypass{pid: pid}, fun),
+    do: Bypass.Instance.call(pid, {:stub, fun})
+
+  @doc """
   Allows the function to be invoked zero or many times for the specified route (method and path).
 
   - `method` is one of `["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS", "CONNECT"]`

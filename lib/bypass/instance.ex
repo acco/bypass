@@ -104,7 +104,7 @@ defmodule Bypass.Instance do
     end
   end
 
-  defp do_handle_call({expect, fun}, from, state) when expect in [:expect, :expect_once] do
+  defp do_handle_call({expect, fun}, from, state) when expect in [:expect, :expect_once, :stub] do
     do_handle_call({expect, :any, :any, fun}, from, state)
   end
 
